@@ -69,7 +69,7 @@ export default {
     margin-right: 20px;
 
     h5 {
-      margin: 0 0 5px 0;
+      margin: 0;
     }
   }
 

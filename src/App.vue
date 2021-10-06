@@ -2,12 +2,29 @@
   <nav id="nav">
     <div></div>
     <img alt="Painel logo" src="./assets/logo.png">
-    <p class="logout-btn">Sair</p>
+    <div v-if="!isAuthenticated"></div>
+    <p v-if="isAuthenticated" class="logout-btn">Sair</p>
   </nav>
   <div class="container">
     <router-view/>
   </div>
 </template>
+
+<script>
+import store from './store'
+import { computed } from '@vue/reactivity'
+
+export default {
+  name: 'app',
+  setup(props) {
+    const isAuthenticated = computed(() => store.getters.isAuthenticated)
+    console.log(props.img)
+    return {
+      isAuthenticated
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');

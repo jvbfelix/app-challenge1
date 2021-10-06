@@ -1,22 +1,59 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <nav id="nav">
+    <div></div>
+    <img alt="Painel logo" src="./assets/logo.png">
+    <p class="logout-btn">Sair</p>
+  </nav>
+  <div class="container">
+    <router-view/>
   </div>
-  <router-view/>
 </template>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 
+body {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  margin-left: calc(15vw + 60px);
+}
+
 #nav {
   padding: 30px;
+  background-color: #00BFA6;
+  width: 15vw;
+  height: calc(100% - 60px);
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    max-width: 90%;
+    object-fit: contain;
+  }
+
+  .logout-btn {
+    color: #FFFFFF;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+    width: fit-content;
+    justify-self: flex-end;
+  }
 }
 
 #nav a {

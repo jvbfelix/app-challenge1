@@ -11,7 +11,7 @@ export default createStore({
     },
     logout: (state) => {
       localStorage.removeItem('CobliAPIKey')
-      state.GestorKey = localStorage.getItem('CobliAPIKey') || ''
+      state.ApiKey = localStorage.getItem('CobliAPIKey') || ''
     },
   },
   actions: {
@@ -23,7 +23,7 @@ export default createStore({
     },
   },
   getters: {
-    isAuthenticated: state => !!state.GestorKey,
+    isAuthenticated: state => !!state.ApiKey,
     ApiKey: state => state.ApiKey,
   },
   modules: {

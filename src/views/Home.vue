@@ -19,22 +19,16 @@
         <a href="#">Onde encontro a minha Chave API?</a>
       </form>
     </div>
-
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import store from '../store'
 import axios from 'axios';
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  },
   data() {
     return {
       APIkey: '',
@@ -51,7 +45,7 @@ export default {
         })
         .then(() => {
             store.dispatch('login',this.APIkey)
-            this.$router.push('/about')
+            this.$router.push('/dash')
         }).catch(() => {
             alert("Erro ao validar a chave, favor verificar e tentar novamente")
         })

@@ -38,6 +38,7 @@ export default {
     login() {
       const headers = {
         'cobli-api-key': this.APIkey,
+        'Access-Control-Allow-Origin': '*',
       }
       axios
         .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/past",{

@@ -1,10 +1,11 @@
 <template>
   <div class="dash">
+    {{}}
     <div class="numbers">
-      <DashNumber num="20" name="manutenção"/>
-      <DashNumber num="30" name="manutenção"/>
-      <DashNumber num="40" name="manutenção"/>
-      <DashNumber num="50" name="manutenção"/>
+      <DashNumber :num=total_maint name="Total de Manutenções"/>
+      <DashNumber :num=maint_agendadas_num name="Manutenções Agendadas"/>
+      <DashNumber :num=maint_delayed_num name="Manutenções Atrasadas"/>
+      <DashNumber :num=big_cost_num name="Maior Gasto com Manutenção"/>
     </div>
     <div class="graphs">
       <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
@@ -19,7 +20,7 @@
 // @ is an alias to /src
 import DashNumber from '@/components/DashNumber.vue'
 import store from '../store'
-//import axios from 'axios';
+import axios from 'axios';
 import { computed } from '@vue/reactivity'
 import VueApexCharts from "vue3-apexcharts";
 
@@ -31,7 +32,15 @@ export default {
   },
   data() {
     return {
-      APIkey: '',
+      Maintenances: '',
+      MaintenancesUp: '',
+      MaintenancesDelayed: '',
+      MaintenancesOnTime: '',
+      MaintenancesWarning: '',
+      total_maint: '',
+      maint_agendadas_num: '',
+      maint_delayed_num: '',
+      big_cost_num: '',
        series: [44, 55, 67, 83],
           chartOptions: {
             chart: {
@@ -62,16 +71,82 @@ export default {
           },
     }
   },
-  setup(props) {
+  methods: {
+    getMan() {
+      const headers = {
+        'cobli-api-key': this.ApiKey,
+      }
+      axios
+        .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/past",{
+          headers:headers,
+        })
+        .then((res) => {
+          //console.log(res.data['pastMaintenancesById'])
+          this.Maintenances = res.data['pastMaintenancesById']
+          this.total_maint = Object.keys(this.Maintenances).length
+        }).catch((err) => {
+          console.log(err)
+          alert("Erro ao validar a chave, favor verificar e tentar novamente")
+        })
+    },
+    getManAgenda() {
+      const headers = {
+        'cobli-api-key': this.ApiKey,
+      }
+      axios
+        .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/upcoming",{
+          headers:headers,
+        })
+        .then((res) => {
+          //console.log(res)
+          this.MaintenancesDelayed = res.data['delayed']
+          this.maint_delayed_num = Object.keys(this.MaintenancesDelayed).length
+          this.MaintenancesOnTime = res.data['onTime']
+          this.MaintenancesWarning = res.data['warning']
+          this.maint_agendadas_num = Object.keys(this.MaintenancesOnTime).length + Object.keys(this.MaintenancesWarning).length
+        }).catch((err) => {
+          console.log(err)
+          alert("Erro ao validar a chave, favor verificar e tentar novamente")
+        })
+    },
+    getManCost() {
+      const headers = {
+        'cobli-api-key': this.ApiKey,
+      }
+      var now = new Date().getTime();
+      var begin = now - 90;
+      const params = {
+        begin: begin,
+        end: now,
+        tz: "America/Sao_Paulo",
+      }
+      axios
+        .get("https://api.cobli.co/herbie-1.1/costs/maintenance",{ params: params},{
+          headers:headers,
+        })
+        .then((res) => {
+          console.log(res.data)
+        }).catch((err) => {
+          console.log(err)
+          alert("Erro ao validar a chave, favor verificar e tentar novamente")
+        })
+    },
+  },
+  setup() {
     const isAuthenticated = computed(() => store.getters.isAuthenticated)
-    console.log(props.img)
+    const ApiKey = computed(() => store.getters.ApiKey)
     return {
-      isAuthenticated
+      isAuthenticated,
+      ApiKey
     }
   },
   mounted() {
     if(!this.isAuthenticated) {
       this.$router.push('/')
+    } else {
+      this.getMan()
+      this.getManAgenda()
+      this.getManCost()
     }
   }
 }

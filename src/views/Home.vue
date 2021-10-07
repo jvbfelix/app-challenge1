@@ -26,6 +26,7 @@
 // @ is an alias to /src
 import store from '../store'
 import axios from 'axios';
+import { computed } from '@vue/reactivity'
 
 export default {
   name: 'Home',
@@ -38,7 +39,6 @@ export default {
     login() {
       const headers = {
         'cobli-api-key': this.APIkey,
-        'Access-Control-Allow-Origin': '*',
       }
       axios
         .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/past",{
@@ -52,6 +52,18 @@ export default {
         })
     }
   },
+  setup(props) {
+    const isAuthenticated = computed(() => store.getters.isAuthenticated)
+    console.log(props.img)
+    return {
+      isAuthenticated
+    }
+  },
+  mounted() {
+    if(this.isAuthenticated) {
+      this.$router.push('/dash')
+    }
+  }
 }
 </script>
 

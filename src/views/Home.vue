@@ -17,7 +17,6 @@
         <input type="text" id="API" name="API" />
         <button>Entrar</button>
         <a href="#">Onde encontro a minha Chave API?</a>
-        <a href="#">Saiba com encontrar o ID do seu motorista</a>
       </form>
     </div>
 
@@ -39,12 +38,19 @@ export default {
 
 <style lang="scss">
 
+.home {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+}
+
 .banner-home {
   background-color: #F5F3F3;
   margin: 40px;
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 10px 10px #0000001A;
+  height: fit-content;
 
   img {
     max-width: 250px;

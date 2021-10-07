@@ -12,9 +12,9 @@
         <p>É grátis e fácil de usar! Experimente agora</p>
         </div>
       </div>
-      <form class="login-form">
+      <form class="login-form" @submit.prevent="login">
         <label for="API">Chave API</label>
-        <input type="text" id="API" name="API" />
+        <input type="text" v-model="APIkey" id="API" name="API" minlength="8" />
         <button>Entrar</button>
         <a href="#">Onde encontro a minha Chave API?</a>
       </form>
@@ -27,12 +27,36 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import store from '../store'
+import axios from 'axios';
 
 export default {
   name: 'Home',
   components: {
     HelloWorld
-  }
+  },
+  data() {
+    return {
+      APIkey: '',
+    }
+  },
+  methods: {
+    login() {
+      const headers = {
+        'cobli-api-key': this.APIkey,
+      }
+      axios
+        .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/past",{
+            headers:headers,
+        })
+        .then(() => {
+            store.dispatch('login',this.APIkey)
+            this.$router.push('/about')
+        }).catch(() => {
+            alert("Erro ao validar a chave, favor verificar e tentar novamente")
+        })
+    }
+  },
 }
 </script>
 

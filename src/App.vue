@@ -3,7 +3,7 @@
     <div></div>
     <img alt="Painel logo" src="./assets/logo.png">
     <div v-if="!isAuthenticated"></div>
-    <p v-if="isAuthenticated" class="logout-btn">Sair</p>
+    <p v-if="isAuthenticated" v-on:click="logout()" class="logout-btn">Sair</p>
   </nav>
   <div class="container">
     <router-view/>
@@ -22,7 +22,13 @@ export default {
     return {
       isAuthenticated
     }
-  }
+  },
+  methods: {
+    logout() {
+      store.dispatch('logout')
+      this.$router.push('/')
+    }
+  },
 }
 </script>
 

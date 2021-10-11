@@ -166,7 +166,6 @@ export default {
       this.showCars = false
       for(let i in val){
         this.fiveCarsSum += val[i].cost
-        console.log(val[i].cost)
       }
       this.fiveCarsSum = this.fiveCarsSum.toFixed(2)
       for(let i in val){
@@ -174,6 +173,37 @@ export default {
         this.fiveCarsName.push(val[i].id)
       }
       this.fiveCarsName = Object.values(this.fiveCarsName)
+
+
+      const headers = {
+        'cobli-api-key': this.ApiKey,
+      }
+      axios
+        .get("https://api.cobli.co/herbie-1.1/dash/device",{
+          headers:headers,
+        })
+        .then((res) => {
+          let names = []
+          for (let c in res.data.devices){
+            const id = res.data.devices[c].vehicle.vehicle_id
+            const name = res.data.devices[c].vehicle.model + " , " + res.data.devices[c].vehicle.license_plate
+            names.push({id,name})
+          }
+          let newNames = []
+          const ids = Object.values(this.fiveCarsName)
+          for (let i in ids){
+            for (let j in names){
+              if( names[j].id === ids[i]){
+                  newNames.push(names[j].name)
+                }
+            }
+          }
+          this.fiveCarsName = newNames
+          this.chart5cars.updateOptions({ labels: this.fiveCarsName, });
+        }).catch((err) => {
+          console.log(err)
+          alert("Erro ao validar a chave, favor verificar e tentar novamente")
+        })
       this.fiveCars = Object.values(this.fiveCars)
       this.showCars = true
       this.chart5cars.updateOptions({ labels: this.fiveCarsName, });

@@ -16,7 +16,7 @@
         <label for="API">Chave API</label>
         <input type="text" v-model="APIkey" id="API" name="API" minlength="8" />
         <button>Entrar</button>
-        <a href="#">Onde encontro a minha Chave API?</a>
+        <a href="https://suporte.cobli.co/pt-BR/articles/5569498-como-gerar-chaves-para-consumir-as-apis-da-cobli">Onde encontro a minha Chave API?</a>
       </form>
     </div>
   </div>

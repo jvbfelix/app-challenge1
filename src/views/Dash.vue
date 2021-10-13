@@ -10,9 +10,9 @@
     </div>
     <div class="graphs">
       <apexchart type="radialBar" ref="chart5cars" height="350" :options="chartOptions" :series="fiveCars"></apexchart>
-      <!--<apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
-      <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
-      <apexchart type="area" height="350" :options="chartOptions" :series="series"></apexchart>-->
+      <apexchart type="bar" ref="chartWeekCoast" width="600" height="350" :options="chartOptions2" :series="costsWeeks"></apexchart>
+      <apexchart type="bar" ref="chartWeekType" width="600" height="350" :options="chartOptions3" :series="manWeeks"></apexchart>
+      <!--<apexchart type="area" height="350" :options="chartOptions" :series="series"></apexchart>-->
     </div>
   </div>
 </template>
@@ -48,7 +48,12 @@ export default {
       fiveCarsName: [],
       gCost: 0,
       showCars: false,
-       series: [],
+      dayWeek: 0,
+      daysNum: 16,
+      daysStr: [],
+      weeks: [],
+      costsWeeks: [],
+      manWeeks: [],
           chartOptions: {
             chart: {
               height: 350,
@@ -79,6 +84,50 @@ export default {
             },
             labels: [],
           },
+      chartOptions2: {
+            chart: {
+              height: 350,
+              type: 'bar',
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            
+            xaxis: {
+              categories: [],
+              position: 'top',
+            },
+            title: {
+              text: 'Gastos com manutenção por semana',
+              floating: true,
+              offsetY: 330,
+              align: 'center',
+              style: {
+                color: '#444'
+              }
+            }
+      },
+      chartOptions3: {
+            chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+              toolbar: {
+                show: true
+              },
+              zoom: {
+                enabled: true
+              }
+            },
+            title: {
+              text: 'Tipos de manutenção por semana',
+              floating: true,
+              align: 'center',
+              style: {
+                color: '#444'
+              }
+            }
+          },
     }
   },
   methods: {
@@ -91,11 +140,20 @@ export default {
           headers:headers,
         })
         .then((res) => {
+          this.getDay()
           this.Maintenances = res.data['pastMaintenancesById']
           this.total_maint = Object.keys(this.Maintenances).length
           let manType = []
+          let manTypeP = []
+          let manTypeC = []
+          let manCost = []
           let car = []
           this.gCost = 0
+          for(let i = 0; i < this.daysNum; i++){
+              manCost[i] = 0
+              manTypeP[i] = 0
+              manTypeC[i] = 0
+            }
           for (let i in this.Maintenances){
             let time = this.Maintenances[i]['maintenance_time']
             let type = this.Maintenances[i]['maintenance_type']
@@ -121,7 +179,32 @@ export default {
             }
             car[this.Maintenances[i]['vehicle_id']] += custo
             manType.push({time, type})
+            for(let i = 0; i < this.daysNum; i++){
+              const date = new Date(time)
+              if (date <= this.weeks[i] && date >= this.weeks[i+1]){
+                manCost[i] += custo
+                for (let j in type){
+                  if(type[j] == 'preventive'){
+                    manTypeP[i]++
+                  }else if(type[j] == 'corrective'){
+                    manTypeC[i]++
+                  }
+                }
+              }
+            }
+            console.log(manType)
           }
+          this.costsWeeks = [{
+            name: 'Gasto com Manutenção',
+            data: manCost.reverse()
+          }]
+          this.manWeeks = [{
+            name: 'Preventiva',
+            data: manTypeP.reverse()
+          }, {
+            name: 'Corretiva',
+            data: manTypeC.reverse()
+          }]
           this.ret5car(car)
           //console.log(this.Maintenances)
         }).catch((err) => {
@@ -208,15 +291,38 @@ export default {
       this.showCars = true
       this.chart5cars.updateOptions({ labels: this.fiveCarsName, });
     },
+    getDay(){
+      const now = new Date
+      this.dayWeek = now.getDay()
+      //console.log(now)
+      now.setDate(now.getDate() - now.getDay())
+      let dates= []
+      for(let i = 0; i < this.daysNum+1; i++){
+        dates.push(new Date(now))
+        this.daysStr.push(now.getDate().toString() + "/" + now.getMonth().toString())
+        now.setDate(now.getDate() - 7)
+      }
+      //console.log(this.chartWeekCoast)
+      this.chartWeekCoast.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
+      this.chartWeekType.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
+      //console.log(this.daysStr)
+      this.weeks = dates
+      //console.log(dates)
+      //console.log(now)
+    }
   },
   setup() {
     const isAuthenticated = computed(() => store.getters.isAuthenticated)
     const ApiKey = computed(() => store.getters.ApiKey)
-    const  chart5cars = ref(null)
+    const chart5cars = ref(null)
+    const chartWeekType = ref(null)
+    const chartWeekCoast = ref(null)
     return {
       isAuthenticated,
       ApiKey,
-      chart5cars
+      chart5cars,
+      chartWeekType,
+      chartWeekCoast
     }
   },
   mounted() {

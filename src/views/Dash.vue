@@ -87,7 +87,7 @@ export default {
         'cobli-api-key': this.ApiKey,
       }
       axios
-        .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/past",{
+        .get("https://backend-app-challenge-jvbfelix.vercel.app/manutencao",{
           headers:headers,
         })
         .then((res) => {
@@ -134,7 +134,7 @@ export default {
         'cobli-api-key': this.ApiKey,
       }
       axios
-        .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/upcoming",{
+        .get("https://backend-app-challenge-jvbfelix.vercel.app/upcoming",{
           headers:headers,
         })
         .then((res) => {
@@ -179,7 +179,7 @@ export default {
         'cobli-api-key': this.ApiKey,
       }
       axios
-        .get("https://api.cobli.co/herbie-1.1/dash/device",{
+        .get("https://backend-app-challenge-jvbfelix.vercel.app/devices",{
           headers:headers,
         })
         .then((res) => {

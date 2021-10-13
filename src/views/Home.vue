@@ -41,7 +41,7 @@ export default {
         'cobli-api-key': this.APIkey,
       }
       axios
-        .get("https://api.cobli.co/herbie-1.1/maintenance/maintenances/past",{
+        .get("https://backend-app-challenge-jvbfelix.vercel.app/manutencao",{
             headers:headers,
         })
         .then(() => {

@@ -12,7 +12,8 @@
       <apexchart type="radialBar" ref="chart5cars" height="350" :options="chartOptions" :series="fiveCars"></apexchart>
       <apexchart type="bar" ref="chartWeekCoast" width="600" height="350" :options="chartOptions2" :series="costsWeeks"></apexchart>
       <apexchart type="bar" ref="chartWeekType" width="600" height="350" :options="chartOptions3" :series="manWeeks"></apexchart>
-      <!--<apexchart type="area" height="350" :options="chartOptions" :series="series"></apexchart>-->
+      <apexchart type="area" ref="chartWeekManTp" width="600" height="350" :options="chartOptions4" :series="manNames"></apexchart>
+      <apexchart type="area" ref="chartWeekManTpNum" width="600" height="350" :options="chartOptions5" :series="manNamesNum"></apexchart>
     </div>
   </div>
 </template>
@@ -54,6 +55,8 @@ export default {
       weeks: [],
       costsWeeks: [],
       manWeeks: [],
+      manNames: [],
+      manNamesNum: [],
           chartOptions: {
             chart: {
               height: 350,
@@ -128,6 +131,46 @@ export default {
               }
             }
           },
+      chartOptions4: {
+            chart: {
+              height: 350,
+              type: 'area'
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              curve: 'smooth'
+            },
+            title: {
+              text: 'Custos de manutenção por item semanal',
+              floating: true,
+              align: 'center',
+              style: {
+                color: '#444'
+              }
+            }
+          },
+      chartOptions5: {
+            chart: {
+              height: 350,
+              type: 'area'
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              curve: 'smooth'
+            },
+            title: {
+              text: 'Números de manutenções por itens semanal',
+              floating: true,
+              align: 'center',
+              style: {
+                color: '#444'
+              }
+            }
+          },
     }
   },
   methods: {
@@ -142,12 +185,15 @@ export default {
         .then((res) => {
           this.getDay()
           this.Maintenances = res.data['pastMaintenancesById']
+          console.log(this.Maintenances)
           this.total_maint = Object.keys(this.Maintenances).length
           let manType = []
           let manTypeP = []
           let manTypeC = []
           let manCost = []
           let car = []
+          let manNames = []
+          let manNamesData = []
           this.gCost = 0
           for(let i = 0; i < this.daysNum; i++){
               manCost[i] = 0
@@ -157,18 +203,29 @@ export default {
           for (let i in this.Maintenances){
             let time = this.Maintenances[i]['maintenance_time']
             let type = this.Maintenances[i]['maintenance_type']
+            let itens = this.Maintenances[i]['items']
+            console.log(itens)
             let custo = 0
             for (let j in this.Maintenances[i]['items']){
               try{
                 let c = this.Maintenances[i]['items'][j]['item_price']
+                let name = this.Maintenances[i]['items'][j]['item_name'].value
                 if (typeof c === 'undefined'){
                   c = 0
+                }
+                if(!manNames.includes(name)){
+                  manNames.push(name)
+                  manNamesData.push({name,time,custo:c})
+                } else {
+                  manNamesData.push({name,time,custo:c})
                 }
                 custo += parseFloat(c)
               } catch {
                 continue
               }
             }
+            //console.log(manNamesData)
+            //console.log(manNames)
             this.gCost += custo
             if (this.big_cost_num < custo) {
               this.big_cost_num = custo
@@ -192,8 +249,42 @@ export default {
                 }
               }
             }
-            console.log(manType)
+            //console.log(manType)
           }
+          let CharManNameData = []
+          let ChartWeekManTpNum = []
+          for(let i in manNames){
+            let temp = []
+            let temp2 = []
+            let use = false
+            for(let j = 0; j < this.daysNum; j++){
+              temp[j] = 0
+              temp2[j] = 0
+            }
+            for(let j in manNamesData){
+              if(manNamesData[j].name == manNames[i]){
+                for(let k = 0; k < this.daysNum; k++){
+                  const date = new Date(manNamesData[j].time)
+                  if (date <= this.weeks[k] && date >= this.weeks[k+1]){
+                    temp[k] += manNamesData[j].custo
+                    temp2[k]++
+                    use = true
+                  }
+                }
+              }
+            }
+            if(use){
+              CharManNameData.push({
+                name: manNames[i],
+                data: temp.reverse()})
+              ChartWeekManTpNum.push({
+                name: manNames[i],
+                data: temp2.reverse()})
+            }
+            
+          }
+          this.manNames = CharManNameData
+          this.manNamesNum = ChartWeekManTpNum
           this.costsWeeks = [{
             name: 'Gasto com Manutenção',
             data: manCost.reverse()
@@ -305,6 +396,8 @@ export default {
       //console.log(this.chartWeekCoast)
       this.chartWeekCoast.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
       this.chartWeekType.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
+      this.chartWeekManTp.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
+      this.chartWeekManTpNum.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
       //console.log(this.daysStr)
       this.weeks = dates
       //console.log(dates)
@@ -317,12 +410,16 @@ export default {
     const chart5cars = ref(null)
     const chartWeekType = ref(null)
     const chartWeekCoast = ref(null)
+    const chartWeekManTp = ref(null)
+    const chartWeekManTpNum = ref(null)
     return {
       isAuthenticated,
       ApiKey,
       chart5cars,
       chartWeekType,
-      chartWeekCoast
+      chartWeekCoast,
+      chartWeekManTp,
+      chartWeekManTpNum
     }
   },
   mounted() {

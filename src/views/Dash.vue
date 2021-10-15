@@ -9,7 +9,7 @@
       <DashNumber :num=big_cost_num name="Maior Gasto com Manutenção"/>
     </div>
     <div class="graphs">
-      <apexchart type="radialBar" ref="chart5cars" height="350" :options="chartOptions" :series="fiveCars"></apexchart>
+      <apexchart type="radialBar" ref="chart5cars" height="370" :options="chartOptions" :series="fiveCars"></apexchart>
       <apexchart type="bar" ref="chartWeekCoast" width="600" height="350" :options="chartOptions2" :series="costsWeeks"></apexchart>
       <apexchart type="bar" ref="chartWeekType" width="600" height="350" :options="chartOptions3" :series="manWeeks"></apexchart>
       <apexchart type="area" ref="chartWeekManTp" width="600" height="350" :options="chartOptions4" :series="manNames"></apexchart>
@@ -59,7 +59,7 @@ export default {
       manNamesNum: [],
           chartOptions: {
             chart: {
-              height: 350,
+              height: 370,
               type: 'radialBar',
             },
             plotOptions: {
@@ -86,6 +86,15 @@ export default {
               }
             },
             labels: [],
+            title: {
+              text: 'Gasto total por veículo',
+              floating: true,
+              align: 'center',
+              offsetY: 330,
+              style: {
+                color: '#444'
+              }
+            },
           },
       chartOptions2: {
             chart: {

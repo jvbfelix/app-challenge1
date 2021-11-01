@@ -155,4 +155,14 @@ export default {
   }
 }
 
+@media (min-width: 1500px){
+  .banner-home {
+    margin: 40px 140px;
+    font-size: 1.2em;
+    img {
+      max-width: 350px;
+    }
+  }
+}
+
 </style>

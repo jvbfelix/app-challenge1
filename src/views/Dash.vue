@@ -9,11 +9,11 @@
       <DashNumber :num=big_cost_num name="Maior Gasto com Manutenção"/>
     </div>
     <div class="graphs">
-      <apexchart type="radialBar" ref="chart5cars" height="370" :options="chartOptions" :series="fiveCars"></apexchart>
-      <apexchart type="bar" ref="chartWeekCoast" width="600" height="350" :options="chartOptions2" :series="costsWeeks"></apexchart>
-      <apexchart type="bar" ref="chartWeekType" width="600" height="350" :options="chartOptions3" :series="manWeeks"></apexchart>
-      <apexchart type="area" ref="chartWeekManTp" width="600" height="350" :options="chartOptions4" :series="manNames"></apexchart>
-      <apexchart type="area" ref="chartWeekManTpNum" width="600" height="350" :options="chartOptions5" :series="manNamesNum"></apexchart>
+      <apexchart type="radialBar" ref="chart5cars" height="370" width="100%" :options="chartOptions" :series="fiveCars"></apexchart>
+      <apexchart type="bar" ref="chartWeekCoast" width="100%" height="350" :options="chartOptions2" :series="costsWeeks"></apexchart>
+      <apexchart type="bar" ref="chartWeekType" width="100%" height="350" :options="chartOptions3" :series="manWeeks"></apexchart>
+      <apexchart type="area" ref="chartWeekManTp" width="100%" height="350" :options="chartOptions4" :series="manNames"></apexchart>
+      <apexchart type="area" ref="chartWeekManTpNum" width="100%" height="350" :options="chartOptions5" :series="manNamesNum"></apexchart>
     </div>
   </div>
 </template>
@@ -134,7 +134,7 @@ export default {
             title: {
               text: 'Tipos de manutenção por semana',
               floating: true,
-              align: 'center',
+              align: 'left',
               style: {
                 color: '#444'
               }
@@ -145,6 +145,10 @@ export default {
               height: 350,
               type: 'area'
             },
+            responsive: [{
+              breakpoint: 1500,
+              options: {width: 250},
+            }],
             dataLabels: {
               enabled: false
             },
@@ -154,7 +158,7 @@ export default {
             title: {
               text: 'Custos de manutenção por item semanal',
               floating: true,
-              align: 'center',
+              align: 'left',
               style: {
                 color: '#444'
               }
@@ -174,7 +178,7 @@ export default {
             title: {
               text: 'Números de manutenções por itens semanal',
               floating: true,
-              align: 'center',
+              align: 'left',
               style: {
                 color: '#444'
               }
@@ -467,7 +471,16 @@ export default {
   flex-wrap: wrap;
 
   .vue-apexcharts {
-    margin: 30px;
+    margin: 30px 10px;
+    width: calc(50% - 60px);
+  }
+}
+
+@media (min-width: 1500px){
+  .graphs {
+    .vue-apexcharts {
+      margin: 30px;
+    }
   }
 }
 

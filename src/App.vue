@@ -50,13 +50,13 @@ body {
 .container {
   display: flex;
   min-height: 100vh;
-  margin-left: calc(15vw + 60px);
+  margin-left: calc(10vw + 60px);
 }
 
 #nav {
   padding: 30px;
   background-color: #00BFA6;
-  width: 15vw;
+  width: 10vw;
   height: calc(100% - 60px);
   position: fixed;
   display: flex;

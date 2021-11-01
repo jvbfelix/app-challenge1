@@ -17,6 +17,7 @@
         <input type="text" v-model="APIkey" id="API" name="API" minlength="8" />
         <button>Entrar</button>
         <a href="https://suporte.cobli.co/pt-BR/articles/5569498-como-gerar-chaves-para-consumir-as-apis-da-cobli">Onde encontro a minha Chave API?</a>
+        <a href="https://faqpainelinteligente.tawk.help/category/perguntas-frequentes">Tire suas principais dúvidas aqui</a>
       </form>
     </div>
   </div>
@@ -152,6 +153,10 @@ export default {
     font-weight: 700;
     text-decoration: none;
     margin: 10px 0;
+  }
+
+  a {
+    color: #317AF6;
   }
 }
 

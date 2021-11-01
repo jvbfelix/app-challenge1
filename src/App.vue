@@ -2,8 +2,9 @@
   <nav id="nav">
     <div></div>
     <img alt="Painel logo" src="./assets/logo.png">
-    <div v-if="!isAuthenticated"></div>
-    <p v-if="isAuthenticated" v-on:click="logout()" class="logout-btn">Sair</p>
+    <div class="nav-link"><a class="nav-btn" href="https://faqpainelinteligente.tawk.help/category/perguntas-frequentes">
+    Precisa de ajuda?</a>
+    <p class="nav-btn" v-if="isAuthenticated" v-on:click="logout()">Sair</p></div>
   </nav>
   <div class="container">
     <router-view/>
@@ -69,13 +70,17 @@ body {
     object-fit: contain;
   }
 
-  .logout-btn {
+  .nav-link {
+    min-height: 80px;
+    width: fit-content;
+    justify-self: flex-end;
+  }
+
+  .nav-btn {
     color: #FFFFFF;
     font-weight: 700;
     text-decoration: underline;
     cursor: pointer;
-    width: fit-content;
-    justify-self: flex-end;
   }
 }
 

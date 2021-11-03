@@ -430,7 +430,6 @@ export default {
     if(!this.isAuthenticated) {
       this.$router.push('/')
     } else {
-      console.log("Autenticado")
       this.getMan()
       this.getManAgenda()
     }

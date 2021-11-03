@@ -215,7 +215,6 @@ export default {
           for (let i in this.Maintenances){
             let time = this.Maintenances[i]['maintenance_time']
             let type = this.Maintenances[i]['maintenance_type']
-            let itens = this.Maintenances[i]['items']
             let custo = 0
             for (let j in this.Maintenances[i]['items']){
               try{

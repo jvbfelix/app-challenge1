@@ -198,7 +198,6 @@ export default {
         .then((res) => {
           this.getDay()
           this.Maintenances = res.data['pastMaintenancesById']
-          console.log(this.Maintenances)
           this.total_maint = Object.keys(this.Maintenances).length
           let manType = []
           let manTypeP = []
@@ -217,7 +216,6 @@ export default {
             let time = this.Maintenances[i]['maintenance_time']
             let type = this.Maintenances[i]['maintenance_type']
             let itens = this.Maintenances[i]['items']
-            console.log(itens)
             let custo = 0
             for (let j in this.Maintenances[i]['items']){
               try{
@@ -321,7 +319,6 @@ export default {
           headers:headers,
         })
         .then((res) => {
-          //console.log(res)
           this.MaintenancesDelayed = res.data['delayed']
           this.maint_delayed_num = Object.keys(this.MaintenancesDelayed).length
           this.MaintenancesOnTime = res.data['onTime']

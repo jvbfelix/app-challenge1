@@ -237,8 +237,6 @@ export default {
                 continue
               }
             }
-            //console.log(manNamesData)
-            //console.log(manNames)
             this.gCost += custo
             if (this.big_cost_num < custo) {
               this.big_cost_num = custo
@@ -262,7 +260,6 @@ export default {
                 }
               }
             }
-            //console.log(manType)
           }
           let CharManNameData = []
           let ChartWeekManTpNum = []
@@ -310,7 +307,6 @@ export default {
             data: manTypeC.reverse()
           }]
           this.ret5car(car)
-          //console.log(this.Maintenances)
         }).catch((err) => {
           console.log(err)
           alert("Erro ao validar a chave, favor verificar e tentar novamente")
@@ -398,7 +394,6 @@ export default {
     getDay(){
       const now = new Date
       this.dayWeek = now.getDay()
-      //console.log(now)
       now.setDate(now.getDate() - now.getDay())
       let dates= []
       for(let i = 0; i < this.daysNum+1; i++){
@@ -406,15 +401,11 @@ export default {
         this.daysStr.push(now.getDate().toString() + "/" + now.getMonth().toString())
         now.setDate(now.getDate() - 7)
       }
-      //console.log(this.chartWeekCoast)
       this.chartWeekCoast.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
       this.chartWeekType.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
       this.chartWeekManTp.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
       this.chartWeekManTpNum.updateOptions({ xaxis: {categories:this.daysStr.reverse(), } });
-      //console.log(this.daysStr)
       this.weeks = dates
-      //console.log(dates)
-      //console.log(now)
     }
   },
   setup() {
@@ -439,6 +430,7 @@ export default {
     if(!this.isAuthenticated) {
       this.$router.push('/')
     } else {
+      console.log("Autenticado")
       this.getMan()
       this.getManAgenda()
     }

@@ -30,6 +30,10 @@ export default {
       this.$router.push('/')
     }
   },
+  updated () {
+    console.log('Nova versão disponível')
+    window.location.reload(true)
+  }
 }
 </script>
 

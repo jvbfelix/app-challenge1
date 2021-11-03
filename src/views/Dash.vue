@@ -426,7 +426,7 @@ export default {
     if(!this.isAuthenticated) {
       this.$router.push('/')
     } else {
-      concole.log("Autenticado")
+      console.log("Autenticado")
       this.getMan()
       this.getManAgenda()
     }

@@ -426,6 +426,7 @@ export default {
     if(!this.isAuthenticated) {
       this.$router.push('/')
     } else {
+      concole.log("Autenticado")
       this.getMan()
       this.getManAgenda()
     }
